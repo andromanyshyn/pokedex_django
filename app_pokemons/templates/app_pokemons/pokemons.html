@@ -1,0 +1,65 @@
+{% extends 'app_pokemons/base.html' %}
+
+{% block middle %}
+    <div class="row">
+    <div class="col-sm"><br><br>
+        <form action="{% url 'pokemon_list' %}" method="get">
+            <label for="search_name">Search by name</label>
+            <input type="search" id="search_name" name="search_name" size="15 px;">
+            <input type="submit" value="submit">
+        </form>
+    </div>
+      <div class="col-sm" align="center"><br><br>
+          <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Pokemon</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Stats</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pokemon in page_obj %}
+                    <tr>
+                      <th scope="row"> {{ forloop.counter }}</th>
+                      <td> {{ pokemon.name }}</td>
+                      <td>
+                          {% for type in pokemon.type_set.all %}
+                            <p style="color:green;">{{ type }}</p>
+                          {% endfor %}
+                      </td>
+                      <td>
+                          {% for stat in pokemon.stats_set.all %}
+                            {% if forloop.counter <= 3 %}
+                                <p style="color:blue;">{{ stat }}</p>
+                            {% endif %}
+                          {% endfor %}
+                      </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="{% if page_obj.has_previous %} ?page={{ page_obj.previous_page_number }} {% else %} # {% endif %} ">Previous</a></li>
+                  {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                  {% endfor %}
+                  <li class="page-item"><a class="page-link" href="{% if page_obj.has_next %} ?page={{ page_obj.next_page_number }} {% else %} # {% endif %}">Next</a></li>
+              </ul>
+          </nav>
+      </div>
+        <form action="{% url 'pokemon_list' %}" method="get"><br>
+            <label for="paginate">Pokemons per page:</label>
+            <select id="paginate" name="paginate">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    <div class="col-sm">
+    </div>
+  </div>
+{% endblock %}
