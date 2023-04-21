@@ -1,15 +1,12 @@
 {% extends 'app_pokemons/base.html' %}
 
+
 {% block middle %}
-    <div class="row">
+<div class="row">
     <div class="col-sm"><br><br>
-        <form action="{% url 'pokemon_list' %}" method="get">
-            <label for="search_name">Search by name</label>
-            <input type="search" id="search_name" name="search_name" size="15 px;">
-            <input type="submit" value="submit">
-        </form>
     </div>
       <div class="col-sm" align="center"><br><br>
+          <h2> Favorite Pokemons For {{ user.username }}</h2><br>
           <table class="table">
               <thead>
                 <tr>
@@ -17,13 +14,10 @@
                   <th scope="col">Pokemon</th>
                   <th scope="col">Type</th>
                   <th scope="col">Stats</th>
-                  {% if user.is_authenticated %}
-                    <th scope="col">Favorite</th>
-                  {% endif %}
                 </tr>
               </thead>
               <tbody>
-                {% for pokemon in page_obj %}
+                {% for pokemon in user.pokemons.all %}
                     <tr>
                       <th scope="row"> {{ forloop.counter }}</th>
                       <td> {{ pokemon.name }} </td>
@@ -39,9 +33,6 @@
                             {% endif %}
                           {% endfor %}
                       </td>
-                      {% if user.is_authenticated %}
-                          <td><a href="{{ pokemon.get_absolute_url }}"><input type="button" value="favorite"></a></td>
-                      {% endif %}
                     </tr>
                 {% endfor %}
               </tbody>
@@ -56,15 +47,6 @@
               </ul>
           </nav>
       </div>
-        <form action="{% url 'pokemon_list' %}" method="get"><br>
-            <label for="paginate">Pokemons per page:</label>
-            <select id="paginate" name="paginate">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </select>
-            <input type="submit" value="Submit">
-        </form>
     <div class="col-sm">
     </div>
   </div>
